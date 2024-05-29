@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  mariadb:
+    container_name: container-mariadb
+    build:
+      context: .
+      dockerfile: Dockerfile-mariadb
+    ports:
+      - "3306:3306"
