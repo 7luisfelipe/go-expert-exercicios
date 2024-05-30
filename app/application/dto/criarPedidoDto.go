@@ -1,7 +1,6 @@
-package entity
+package dto
 
-type Pedido struct {
-	Base
+type CriarPedidoDto struct {
 	NumeroPedido  int     `json:"numeroPedido" validate:"required,min=1"`
 	NomeProduto   string  `json:"nomeProduto" validate:"required,max(100)"`
 	Quantidade    int     `json:"quantidade" validate:"required,min=1"`

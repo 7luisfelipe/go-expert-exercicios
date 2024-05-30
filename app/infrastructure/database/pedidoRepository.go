@@ -11,59 +11,53 @@ type PedidoRepository struct {
 	Conn adapters.IConectarBanco
 }
 
+// Cadastra um pedido
+func (repository *PedidoRepository) CriarPedido(produto *entity.Pedido) error {
+	db := repository.Conn.GetConn()
+	defer db.Close()
+
+	command := "INSERT INTO pedidos (numero_pedido, nome_produto, quantidade, preco_unitario) VALUES(?, ?, ?, ?);"
+	_, err := db.Exec(command, produto.NumeroPedido, produto.NomeProduto, produto.Quantidade, produto.PrecoUnitario)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// Consulta todos os pedidos
 func (repository *PedidoRepository) BuscarTodosPedidos() (*[]entity.Pedido, error) {
-	//(ip.quantidade * prod.preco) AS valor_total_item
 	db := repository.Conn.GetConn()
 	defer db.Close()
 	rows, err := db.Query(`
 						 SELECT p.numero_pedido,
-								ip.quantidade,
-								ip.preco,
-								prod.nome AS produto_nome,
-								prod.preco
+								p.nome_produto,
+								p.quantidade,
+								p.preco_unitario
 						FROM pedidos p
-						JOIN itens_pedido ip ON p.id = ip.pedido_id
-						JOIN produtos prod ON ip.produto_id = prod.id
-						ORDER BY p.numero_pedido, ip.id;
+						ORDER BY p.id ASC;
 	`)
 	if err != nil {
 		return nil, err
 	}
 
 	var pedidos []entity.Pedido
-	var pedido entity.Pedido
-	pedido.NumeroPedido = -1
 
 	for rows.Next() {
 
-		var pd entity.Pedido
-		var it entity.ItemPedido
+		var p entity.Pedido
 
 		err = rows.Scan(
-			&pd.NumeroPedido,
-			&it.Quantidade,
-			&it.Preco,
-			&it.Produto.Nome,
-			&it.Produto.Preco,
+			&p.NumeroPedido,
+			&p.NomeProduto,
+			&p.Quantidade,
+			&p.PrecoUnitario,
 		)
 		if err != nil {
 			return nil, err
 		}
 
-		//Valida se é um novo pedido
-		if pedido.NumeroPedido != pd.NumeroPedido {
-
-			//Se o NumeroPedido for -1 então é o valor inicial, não um pedido para add na lista
-			if pedido.NumeroPedido != -1 {
-				//É um pedido válido e já leu todos os itens, então add na lista
-				pedidos = append(pedidos, pedido)
-			}
-			//Novo pedido
-			pedido.NumeroPedido = pd.NumeroPedido
-		}
-
-		//itens do pedido
-		pedido.ItensPedido = append(pedido.ItensPedido, it)
+		pedidos = append(pedidos, p)
 	}
 
 	return &pedidos, nil

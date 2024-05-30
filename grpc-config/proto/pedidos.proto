@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option go_package = "./grpc-config/pb";
+
+service PedidoService {
+    rpc ListarPedidos(ListarPedidosRequest) returns (ListarPedidosResponse);
+}
+
+message ListarPedidosRequest {}
+
+message ListarPedidosResponse {
+    repeated Pedido pedidos = 1;
+}
+
+message Pedido {
+    int32 id = 1;
+    int32 numeroPedido = 2;
+    string nomeProduto = 3;
+    int32 quantidade = 4;
+    float precoUnitario = 5;
+}
