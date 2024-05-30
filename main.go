@@ -5,9 +5,12 @@ import (
 )
 
 func main() {
-	//Roda a REST
-	go webhttp.Routes()
+	//Roda a aplicação REST
+	go webhttp.WebRest()
 
 	//Roda a aplicação gRPC
-	webhttp.WebGrpc()
+	go webhttp.WebGrpc()
+
+	//Roda a aplicação GraphQl
+	webhttp.WebGraphQL()
 }

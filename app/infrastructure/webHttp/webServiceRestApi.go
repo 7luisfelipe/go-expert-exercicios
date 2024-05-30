@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func Routes() {
+func WebRest() {
 	apiRest := restdelivery.RestApi{}
 
 	//localhost:8081/rest/v1/listar

@@ -12,3 +12,18 @@ Content-Type: application/json
     "quantidade": 2,
     "precoUnitario": 550.0
 }
+
+### GraphQL
+
+POST http://localhost:8081/graphql/v1/listar HTTP/1.1
+
+{
+  "query": "{ pedidos { id numeroPedido nomeProduto quantidade precoUnitario } }"
+}
+
+### 
+POST http://localhost:8081/graphql/v1/listar HTTP/1.1
+
+{
+  "query": "{ pedidos { numeroPedido nomeProduto } }"
+}
