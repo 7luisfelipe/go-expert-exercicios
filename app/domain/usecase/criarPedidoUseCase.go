@@ -6,20 +6,11 @@ import (
 	"modcleanarch/app/domain/repository"
 )
 
-// Implements IProdutoService
-type ProdutoUseCase struct {
+type CriarPedidoUseCase struct {
 	PedidoRepository repository.IPedidoRepository
 }
 
-func (useCase *ProdutoUseCase) ListarPedidos() ([]entity.Pedido, error) {
-	pedidos, err := useCase.PedidoRepository.BuscarTodosPedidos()
-	if err != nil {
-		return nil, err
-	}
-	return *pedidos, nil
-}
-
-func (useCase *ProdutoUseCase) CriarPedido(inputDto *dto.CriarPedidoDto) error {
+func (useCase *CriarPedidoUseCase) Execute(inputDto *dto.CriarPedidoDto) error {
 
 	pedido := entity.Pedido{
 		NumeroPedido:  inputDto.NumeroPedido,

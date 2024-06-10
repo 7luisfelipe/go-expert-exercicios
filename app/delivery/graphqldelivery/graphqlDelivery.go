@@ -3,7 +3,6 @@ package graphqldelivery
 import (
 	"errors"
 	"fmt"
-	"modcleanarch/app/application/service"
 	"modcleanarch/app/domain/usecase"
 	"modcleanarch/app/infrastructure/database"
 	databaseadapter "modcleanarch/app/infrastructure/databaseAdapter"
@@ -53,13 +52,13 @@ var Schema, _ = graphql.NewSchema(
 )
 
 type GraphQlServer struct {
-	PedidoUseCase service.IProdutoService
+	ListarPedidosUseCase usecase.ListarPedidosUseCase
 }
 
 func BuscarPedidos(param graphql.ResolveParams) (interface{}, error) {
 	//Dependências
 	graphQlServer := GraphQlServer{
-		PedidoUseCase: &usecase.ProdutoUseCase{
+		ListarPedidosUseCase: usecase.ListarPedidosUseCase{
 			PedidoRepository: &database.PedidoRepository{
 				Conn: &databaseadapter.MariaDbConectar{},
 			},
@@ -67,7 +66,7 @@ func BuscarPedidos(param graphql.ResolveParams) (interface{}, error) {
 	}
 
 	//Consulta os pedidos
-	pedidos, err := graphQlServer.PedidoUseCase.ListarPedidos()
+	pedidos, err := graphQlServer.ListarPedidosUseCase.Execute()
 	if err != nil {
 		fmt.Println("Falha ao consultar pedidos -> GraphQL:")
 		fmt.Println(err)

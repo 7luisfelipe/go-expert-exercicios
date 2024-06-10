@@ -25,6 +25,7 @@ O comando vai colocar a aplicação no ar nas seguintes portas:
         * api.http
 
 ## gRPC
+* Abrir um terminal na raiz do projeto
 * cd grpc-config/client
 * go run client.go
 

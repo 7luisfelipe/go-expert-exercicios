@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"modcleanarch/app/application/dto"
-	"modcleanarch/app/application/service"
 	"modcleanarch/app/domain/usecase"
 	"modcleanarch/app/infrastructure/database"
 	databaseadapter "modcleanarch/app/infrastructure/databaseAdapter"
@@ -13,19 +12,20 @@ import (
 )
 
 type RestApi struct {
-	PedidoUseCase service.IProdutoService
+	ListarPedidosUseCase usecase.ListarPedidosUseCase
+	CriarPedidoUseCase   usecase.CriarPedidoUseCase
 }
 
 func (controller *RestApi) BuscarPedidos(w http.ResponseWriter, r *http.Request) {
 	//Dependências
-	controller.PedidoUseCase = &usecase.ProdutoUseCase{
+	controller.ListarPedidosUseCase = usecase.ListarPedidosUseCase{
 		PedidoRepository: &database.PedidoRepository{
 			Conn: &databaseadapter.MariaDbConectar{},
 		},
 	}
 
 	//Consulta os pedidos
-	pedidos, err := controller.PedidoUseCase.ListarPedidos()
+	pedidos, err := controller.ListarPedidosUseCase.Execute()
 	if err != nil {
 		fmt.Println("Falha ao consultar pedidos -> REST:")
 		fmt.Println(err)
@@ -41,7 +41,7 @@ func (controller *RestApi) BuscarPedidos(w http.ResponseWriter, r *http.Request)
 
 func (controller *RestApi) CriarPedido(w http.ResponseWriter, r *http.Request) {
 	// Dependências
-	controller.PedidoUseCase = &usecase.ProdutoUseCase{
+	controller.CriarPedidoUseCase = usecase.CriarPedidoUseCase{
 		PedidoRepository: &database.PedidoRepository{
 			Conn: &databaseadapter.MariaDbConectar{},
 		},
@@ -62,7 +62,7 @@ func (controller *RestApi) CriarPedido(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = controller.PedidoUseCase.CriarPedido(&input)
+	err = controller.CriarPedidoUseCase.Execute(&input)
 
 	if err != nil {
 		fmt.Println("Faha ao criar produto - CriarProduto: ", err.Error())

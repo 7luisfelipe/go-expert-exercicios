@@ -3,7 +3,6 @@ package grpcdelivery
 import (
 	"context"
 	"fmt"
-	"modcleanarch/app/application/service"
 	"modcleanarch/app/domain/entity"
 	"modcleanarch/app/domain/usecase"
 	"modcleanarch/app/infrastructure/database"
@@ -12,20 +11,20 @@ import (
 )
 
 type GrpcServer struct {
-	PedidoUseCase service.IProdutoService
+	ListarPedidosUseCase usecase.ListarPedidosUseCase
 	pb.UnimplementedPedidoServiceServer
 }
 
 func (s *GrpcServer) ListarPedidos(ctx context.Context, req *pb.ListarPedidosRequest) (*pb.ListarPedidosResponse, error) {
 	//Dependências
-	s.PedidoUseCase = &usecase.ProdutoUseCase{
+	s.ListarPedidosUseCase = usecase.ListarPedidosUseCase{
 		PedidoRepository: &database.PedidoRepository{
 			Conn: &databaseadapter.MariaDbConectar{},
 		},
 	}
 
 	//Consulta os pedidos
-	pedidos, err := s.PedidoUseCase.ListarPedidos()
+	pedidos, err := s.ListarPedidosUseCase.Execute()
 	if err != nil {
 		fmt.Println("Falha ao consultar pedidos -> REST:")
 		fmt.Println(err)
