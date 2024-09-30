@@ -53,3 +53,8 @@ Desenvolver um sistema em Go que receba um CEP, identifique a cidade e retorne o
 - Utilize docker/docker-compose para que possamos realizar os testes de sua aplicação.
 - Deploy realizado no Google Cloud Run (free tier) e endereço ativo para ser acessado.
   - Não publicado. Me mudei recentemente e está dando algum conflito entre o comprovante de endereço do cartão de crédito com o que está na minha conta google. Cadastro atualizado, aguardando validação.
+
+# Testar a aplicação
+* testes unitários: go test -v ./testes
+* Rodar aplicação: docker-compose up --build -d
+* API: http://localhost:8081/?cep=89037501
