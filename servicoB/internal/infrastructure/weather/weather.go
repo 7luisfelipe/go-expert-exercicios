@@ -1,6 +1,7 @@
 package weather
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -15,7 +16,7 @@ import (
 type Weather struct {
 }
 
-func (f *Weather) FindData(cityName string) (*entities.Weather, error) {
+func (f *Weather) FindData(ctx context.Context, cityName string) (*entities.Weather, error) {
 	baseURL := "http://api.weatherapi.com/v1/current.json"
 
 	// Codificar o valor do parâmetro de consulta
@@ -24,7 +25,7 @@ func (f *Weather) FindData(cityName string) (*entities.Weather, error) {
 	// Construir a URL completa com o parâmetro de consulta
 	fullURL := fmt.Sprintf("%s?q=%s", baseURL, cityEscaped)
 
-	req, err := http.NewRequest("GET", fullURL, nil)
+	req, err := http.NewRequestWithContext(ctx, "GET", fullURL, nil)
 	if err != nil {
 		return nil, err
 	}

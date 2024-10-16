@@ -1,6 +1,7 @@
 package testes
 
 import (
+	"context"
 	"errors"
 	"modapilab1/internal/controller"
 	"modapilab1/internal/domain/dto"
@@ -16,8 +17,8 @@ type MockUseCase struct {
 	mock.Mock
 }
 
-func (mock *MockUseCase) FindData(zipcode string) (*dto.ResultOutpurDto, error) {
-	args := mock.Called(zipcode)
+func (mock *MockUseCase) FindData(ctx context.Context, zipcode string) (*dto.ResultOutpurDto, error) {
+	args := mock.Called(ctx, zipcode)
 	return args.Get(0).(*dto.ResultOutpurDto), args.Error(1)
 }
 
@@ -115,7 +116,7 @@ func TestValidZipCode(t *testing.T) {
 	mockUseCase.On("FindData", input).Return(expectedOutput, nil)
 
 	//Teste
-	result, err := mockUseCase.FindData(input)
+	result, err := mockUseCase.FindData(nil, input)
 
 	assert.NoError(t, err)
 	assert.Equal(t, 22.7, result.Temp_C)
@@ -140,7 +141,7 @@ func TestNotFoundZipCode(t *testing.T) {
 	mockUseCase.On("FindData", input).Return(expectedOutput, expectedErrorOutput)
 
 	//Teste
-	_, err := mockUseCase.FindData(input)
+	_, err := mockUseCase.FindData(nil, input)
 
 	assert.Error(t, err)
 }

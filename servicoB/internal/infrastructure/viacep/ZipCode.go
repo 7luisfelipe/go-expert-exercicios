@@ -1,6 +1,7 @@
 package viacep
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"io"
@@ -13,15 +14,20 @@ import (
 type ViaCep struct {
 }
 
-func (v *ViaCep) FindData(zipcode string) (*entities.ZipCode, error) {
-	req, err := http.Get("http://viacep.com.br/ws/" + zipcode + "/json")
-
+func (v *ViaCep) FindData(ctx context.Context, zipcode string) (*entities.ZipCode, error) {
+	req, err := http.NewRequestWithContext(ctx, "GET", "http://viacep.com.br/ws/"+zipcode+"/json", nil)
 	if err != nil {
 		return nil, err
 	}
-	defer req.Body.Close()
 
-	res, err := io.ReadAll(req.Body)
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	res, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}

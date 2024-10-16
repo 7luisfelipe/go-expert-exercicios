@@ -1,0 +1,6 @@
+### Sistema B
+
+GET http://localhost:8081/?cep=89037501
+
+### Sistema A
+GET http://localhost:8080/?cep=89037501

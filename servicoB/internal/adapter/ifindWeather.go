@@ -1,7 +1,10 @@
 package adapter
 
-import "modapilab1/internal/domain/entities"
+import (
+	"context"
+	"modapilab1/internal/domain/entities"
+)
 
 type IFindWeather interface {
-	FindData(cityName string) (*entities.Weather, error)
+	FindData(ctx context.Context, cityName string) (*entities.Weather, error)
 }

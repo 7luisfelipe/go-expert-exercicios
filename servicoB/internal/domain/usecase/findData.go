@@ -1,12 +1,13 @@
 package usecase
 
 import (
+	"context"
 	"modapilab1/internal/adapter"
 	"modapilab1/internal/domain/dto"
 )
 
 type IFindDataUseCase interface {
-	FindData(zipcode string) (*dto.ResultOutpurDto, error)
+	FindData(ctx context.Context, zipcode string) (*dto.ResultOutpurDto, error)
 }
 
 type FindData struct {
@@ -14,13 +15,13 @@ type FindData struct {
 	Weather adapter.IFindWeather
 }
 
-func (uc *FindData) FindData(zipcode string) (*dto.ResultOutpurDto, error) {
-	z, err := uc.ZipCode.FindData(zipcode)
+func (uc *FindData) FindData(ctx context.Context, zipcode string) (*dto.ResultOutpurDto, error) {
+	z, err := uc.ZipCode.FindData(ctx, zipcode)
 	if err != nil {
 		return nil, err
 	}
 
-	w, err := uc.Weather.FindData(z.Localidade)
+	w, err := uc.Weather.FindData(ctx, z.Localidade)
 	if err != nil {
 		return nil, err
 	}

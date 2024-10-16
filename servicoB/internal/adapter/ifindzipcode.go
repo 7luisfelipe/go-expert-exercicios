@@ -1,7 +1,10 @@
 package adapter
 
-import "modapilab1/internal/domain/entities"
+import (
+	"context"
+	"modapilab1/internal/domain/entities"
+)
 
 type IFindZipCode interface {
-	FindData(zipcode string) (*entities.ZipCode, error)
+	FindData(ctx context.Context, zipcode string) (*entities.ZipCode, error)
 }
