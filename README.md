@@ -52,7 +52,7 @@ Desenvolver um sistema em Go que receba um CEP, identifique a cidade e retorne o
   - Podem ser executados com o comando: go test -v ./testes
 - Utilize docker/docker-compose para que possamos realizar os testes de sua aplicação.
 - Deploy realizado no Google Cloud Run (free tier) e endereço ativo para ser acessado.
-  - Não publicado. Me mudei recentemente e está dando algum conflito entre o comprovante de endereço do cartão de crédito com o que está na minha conta google. Cadastro atualizado, aguardando validação.
+  - Link enviado na plataforma de estudos
 
 # Testar a aplicação
 * testes unitários: go test -v ./testes
