@@ -1,0 +1,26 @@
+### Registrar Lance
+POST http://localhost:8080/bid
+Content-Type:  application/json
+
+{
+  "user_id": "a6deb003-ba12-4dae-801f-e2f75a56de47",
+  "auction_id": "064f9f8a-42f6-4a12-9b03-9620d001aef5",
+  "amount": 150.75
+}
+
+#### Criar Leilão - Já inicia a aplicação cadastrado
+POST http://localhost:8080/auction
+Content-Type:  application/json
+
+{
+  "product_name": "IMAC",
+  "category": "Eletrônicos",
+  "description": "Produto em excelente estado, com pouco uso e garantia.",
+  "condition": 1
+}
+
+### Consultar leilão por status
+GET http://localhost:8080/auction?status=0
+
+### Consultar leilão por id
+GET http://localhost:8080/auction/064f9f8a-42f6-4a12-9b03-9620d001aef5
