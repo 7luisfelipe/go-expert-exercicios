@@ -67,7 +67,7 @@ const (
 type AuctionRepositoryInterface interface {
 	CreateAuction(
 		ctx context.Context,
-		auctionEntity *Auction) *internal_error.InternalError
+		auctionEntity *Auction) (any, *internal_error.InternalError)
 
 	FindAuctions(
 		ctx context.Context,

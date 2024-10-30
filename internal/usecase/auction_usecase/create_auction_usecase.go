@@ -44,7 +44,7 @@ func NewAuctionUseCase(
 type AuctionUseCaseInterface interface {
 	CreateAuction(
 		ctx context.Context,
-		auctionInput AuctionInputDTO) *internal_error.InternalError
+		auctionInput AuctionInputDTO) (any, *internal_error.InternalError)
 
 	FindAuctionById(
 		ctx context.Context, id string) (*AuctionOutputDTO, *internal_error.InternalError)
@@ -69,20 +69,27 @@ type AuctionUseCase struct {
 
 func (au *AuctionUseCase) CreateAuction(
 	ctx context.Context,
-	auctionInput AuctionInputDTO) *internal_error.InternalError {
+	auctionInput AuctionInputDTO) (any, *internal_error.InternalError) {
 	auction, err := auction_entity.CreateAuction(
 		auctionInput.ProductName,
 		auctionInput.Category,
 		auctionInput.Description,
 		auction_entity.ProductCondition(auctionInput.Condition))
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	if err := au.auctionRepositoryInterface.CreateAuction(
-		ctx, auction); err != nil {
-		return err
+	/*
+		if err := au.auctionRepositoryInterface.CreateAuction(
+			ctx, auction); err != nil {
+			return err
+		}
+	*/
+
+	auctionId, err := au.auctionRepositoryInterface.CreateAuction(ctx, auction)
+	if err != nil {
+		return nil, err
 	}
 
-	return nil
+	return auctionId, nil
 }

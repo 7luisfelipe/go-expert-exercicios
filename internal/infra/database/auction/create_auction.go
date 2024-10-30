@@ -2,10 +2,14 @@ package auction
 
 import (
 	"context"
+	"fmt"
+	"os"
+	"time"
 
 	"github.com/7luisfelipe/projetoleilao/configuration/logger"
 	"github.com/7luisfelipe/projetoleilao/internal/entity/auction_entity"
 	"github.com/7luisfelipe/projetoleilao/internal/internal_error"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -30,7 +34,7 @@ func NewAuctionRepository(database *mongo.Database) *AuctionRepository {
 
 func (ar *AuctionRepository) CreateAuction(
 	ctx context.Context,
-	auctionEntity *auction_entity.Auction) *internal_error.InternalError {
+	auctionEntity *auction_entity.Auction) (any, *internal_error.InternalError) {
 	auctionEntityMongo := &AuctionEntityMongo{
 		Id:          auctionEntity.Id,
 		ProductName: auctionEntity.ProductName,
@@ -40,11 +44,42 @@ func (ar *AuctionRepository) CreateAuction(
 		Status:      auctionEntity.Status,
 		Timestamp:   auctionEntity.Timestamp.Unix(),
 	}
-	_, err := ar.Collection.InsertOne(ctx, auctionEntityMongo)
+	res, err := ar.Collection.InsertOne(ctx, auctionEntityMongo)
 	if err != nil {
 		logger.Error("Error trying to insert auction", err)
-		return internal_error.NewInternalServerError("Error trying to insert auction")
+		return nil, internal_error.NewInternalServerError("Error trying to insert auction")
 	}
 
-	return nil
+	// Inicia a goroutine para fechar o leilão
+	go ar.CloseAuction(ctx, auctionEntityMongo.Timestamp, res.InsertedID)
+
+	return res.InsertedID, nil
+}
+
+// CloseAuction encerra o leilão após a duração especificada.
+func (ar *AuctionRepository) CloseAuction(ctx context.Context, timestamp int64, auctionID any) {
+	// Parse a duração do leilão
+	auctionDuration := os.Getenv("AUCTION_INTERVAL")
+	duration, err := time.ParseDuration(auctionDuration)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	// Calcula o tempo de encerramento
+	closingTime := time.Unix(timestamp, 0).Add(duration)
+
+	// Aguarda até o horário de encerramento
+	time.Sleep(time.Until(closingTime))
+
+	// Realiza a atualização no banco de dados para encerrar as propostas
+	_, err = ar.Collection.UpdateMany(ctx,
+		bson.M{"_id": auctionID, "status": 0},
+		bson.M{"$set": bson.M{"status": 1}})
+
+	if err != nil {
+		logger.Error("Error trying to close auction", err)
+		return
+	}
+
+	fmt.Println("Auction closed successfully.")
 }

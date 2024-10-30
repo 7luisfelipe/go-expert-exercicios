@@ -7,6 +7,7 @@ db.users.insertMany([
     },
 ]);
 
+/*
 db.auctions.insertMany([
     {
         _id: "064f9f8a-42f6-4a12-9b03-9620d001aef5",
@@ -18,3 +19,4 @@ db.auctions.insertMany([
         timestamp: Long('1730158227')
     },
 ]);
+*/

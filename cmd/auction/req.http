@@ -4,8 +4,8 @@ Content-Type:  application/json
 
 {
   "user_id": "a6deb003-ba12-4dae-801f-e2f75a56de47",
-  "auction_id": "064f9f8a-42f6-4a12-9b03-9620d001aef5",
-  "amount": 150.75
+  "auction_id": "0476e4e1-d811-48f5-a2ff-1ed67032283f",
+  "amount": 240.76
 }
 
 #### Criar Leilão - Já inicia a aplicação cadastrado
