@@ -21,10 +21,10 @@ Na raiz do projeto:
 
 * 3 - Consultas
 
-* //consultar total de propostas
+* consultar total de propostas
     * db.bids.count();
 
-* //Ver propostas cadastradas
+* Ver propostas cadastradas
     * db.bids.find();
 
 
