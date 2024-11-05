@@ -6,6 +6,6 @@
 # Testar aplicação
 * Na raiz do projeto tem um arquivo requisicoes.http
 
-* zipkin: http://localhost:9411/api/v2/spans
+* zipkin: http://localhost:9411/zipkin
 * Prometheus: localhost:9090
 * Metricas: http://localhost:8080/metrics

@@ -21,12 +21,14 @@ func main() {
 	// URL do servidor Zipkin
 
 	// URL do servidor Zipkin
-	zipkinURL := "http://localhost:9411/api/v2/spans"
+	zipkinURL := "http://zipkin:9411/api/v2/spans"
 
 	// Criar o exportador Zipkin
 	exporter, err := zipkin.New(zipkinURL)
 	if err != nil {
 		log.Fatalf("failed to create zipkin exporter: %v", err)
+	} else {
+		log.Println("Zipkin exporter configurado com sucesso")
 	}
 
 	/*
