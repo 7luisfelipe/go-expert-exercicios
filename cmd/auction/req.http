@@ -1,22 +1,22 @@
+#### Criar Leilão - Copar ID do retorno para usar no registro de lance
+POST http://localhost:8080/auction
+Content-Type:  application/json
+
+{
+  "product_name": "Curso GoLang",
+  "category": "Educação",
+  "description": "Do zero ao especialista em GO",
+  "condition": 1
+}
+
 ### Registrar Lance
 POST http://localhost:8080/bid
 Content-Type:  application/json
 
 {
   "user_id": "a6deb003-ba12-4dae-801f-e2f75a56de47",
-  "auction_id": "0476e4e1-d811-48f5-a2ff-1ed67032283f",
+  "auction_id": "064f9f8a-42f6-4a12-9b03-9620d001aef5",
   "amount": 240.76
-}
-
-#### Criar Leilão - Já inicia a aplicação cadastrado
-POST http://localhost:8080/auction
-Content-Type:  application/json
-
-{
-  "product_name": "IMAC",
-  "category": "Eletrônicos",
-  "description": "Produto em excelente estado, com pouco uso e garantia.",
-  "condition": 1
 }
 
 ### Consultar leilão por status

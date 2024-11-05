@@ -107,6 +107,7 @@ func (bd *BidRepository) CreateBid(
 		}(bid)
 	}
 	wg.Wait()
+
 	return nil
 }
 

@@ -40,4 +40,5 @@ func (u *BidController) CreateBid(c *gin.Context) {
 	}
 
 	c.Status(http.StatusCreated)
+
 }

@@ -71,7 +71,7 @@ func (ar *AuctionRepository) CloseAuction(ctx context.Context, timestamp int64, 
 	// Aguarda até o horário de encerramento
 	time.Sleep(time.Until(closingTime))
 
-	// Realiza a atualização no banco de dados para encerrar as propostas
+	// Realiza a atualização no banco de dados para encerrar o leilão
 	_, err = ar.Collection.UpdateMany(ctx,
 		bson.M{"_id": auctionID, "status": 0},
 		bson.M{"$set": bson.M{"status": 1}})
