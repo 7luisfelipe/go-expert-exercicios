@@ -11,7 +11,15 @@ import (
 	"github.com/7luisfelipe/projetoleilao/internal/internal_error"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
+
+type IMongoCollection interface {
+	InsertOne(ctx context.Context, document interface{}, opts ...*options.InsertOneOptions) (*mongo.InsertOneResult, error)
+	UpdateMany(ctx context.Context, filter interface{}, update interface{}, opts ...*options.UpdateOptions) (*mongo.UpdateResult, error)
+	FindOne(ctx context.Context, filter interface{}, opts ...*options.FindOneOptions) *mongo.SingleResult
+	Find(ctx context.Context, filter interface{}, opts ...*options.FindOptions) (*mongo.Cursor, error)
+}
 
 type AuctionEntityMongo struct {
 	Id          string                          `bson:"_id"`
@@ -23,7 +31,8 @@ type AuctionEntityMongo struct {
 	Timestamp   int64                           `bson:"timestamp"`
 }
 type AuctionRepository struct {
-	Collection *mongo.Collection
+	//Collection *mongo.Collection
+	Collection IMongoCollection
 }
 
 func NewAuctionRepository(database *mongo.Database) *AuctionRepository {
